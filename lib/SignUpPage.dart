@@ -33,7 +33,6 @@ class _SignUpPageState extends State<SignUpPage> {
     if (t1.text != "" &&
         t2.text != "" &&
         t3.text != "" &&
-        t4.text != "" &&
         currentCountry != "") {
       setState(() {
         isCountry = true;
@@ -117,10 +116,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     contentPadding: EdgeInsets.all(10),
                     hintText: "Phone Number",
                   ),
-                  onTap: () {
-                    signup();
-                    setState(() {});
-                  },
+
                 ),
               ),
               Padding(
@@ -193,8 +189,13 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
 
                   onTap: () {
-                    signup();
-                  },
+                    if(t4.text==""){
+
+                    }else {
+                      signup();
+                      isCountry=true;
+                    }
+                    },
                 ),
               ),
               SizedBox(
