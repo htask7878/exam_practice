@@ -22,27 +22,29 @@ class _SignUpPageState extends State<SignUpPage> {
   String? currentCountry;
   bool isCountry = false;
 
+  signup() {
+    if (t1.text == "") {
+      isCountry = false;
+    } else if (t2.text == "") {
+      isCountry = false;
+    } else if (t3.text == "") {
+      isCountry = false;
+    } else if (t4.text == "") {
+      isCountry = false;
+    } else if (selectCountry == "") {
+      isCountry = false;
+    } else {
+      setState(() {
+        isCountry = true;
+      });
+    }
+  }
+
   countryMenu() {
     return countryList
         .map<DropdownMenuItem<String>>(
             (e) => DropdownMenuItem(value: e, child: Text(e)))
         .toList();
-  }
-
-  signup() {
-    if (t1.text != "" &&
-        t2.text != "" &&
-        t3.text != "" &&
-        currentCountry != "") {
-      setState(() {
-        isCountry = true;
-      });
-      print(isCountry);
-    } else {
-      isCountry = false;
-      print("This is not possible");
-    setState(() {});
-    }
   }
 
   @override
@@ -92,16 +94,14 @@ class _SignUpPageState extends State<SignUpPage> {
                     contentPadding: EdgeInsets.all(10),
                     hintText: "Full Name",
                   ),
-                  onTap: () {
+                  onChanged: (value) {
                     signup();
-                    setState(() {});
                   },
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 18, left: 18, top: 15),
                 child: TextField(
-
                   keyboardType: TextInputType.phone,
                   controller: t2,
                   cursorColor: Color(0xff808080),
@@ -116,7 +116,9 @@ class _SignUpPageState extends State<SignUpPage> {
                     contentPadding: EdgeInsets.all(10),
                     hintText: "Phone Number",
                   ),
-
+                  onChanged: (value) {
+                    signup();
+                  },
                 ),
               ),
               Padding(
@@ -133,14 +135,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     borderRadius: BorderRadius.all(Radius.circular(15)),
                     items: countryMenu(),
                     onChanged: (String? value) {
-
                       setState(() {
                         currentCountry = value ?? "";
                       });
-                    },
-                    onTap: () {
                       signup();
-                      setState(() {});
                     },
                   ),
                 ),
@@ -148,9 +146,8 @@ class _SignUpPageState extends State<SignUpPage> {
               Padding(
                 padding: const EdgeInsets.only(right: 18, left: 18, top: 15),
                 child: TextField(
-                  onTap: () {
+                  onChanged: (value) {
                     signup();
-                    setState(() {});
                   },
                   keyboardType: TextInputType.emailAddress,
                   controller: t3,
@@ -187,15 +184,9 @@ class _SignUpPageState extends State<SignUpPage> {
                     contentPadding: EdgeInsets.all(10),
                     hintText: "Password",
                   ),
-
-                  onTap: () {
-                    if(t4.text==""){
-
-                    }else {
-                      signup();
-                      isCountry=true;
-                    }
-                    },
+                  onChanged: (value) {
+                    signup();
+                  },
                 ),
               ),
               SizedBox(
@@ -204,8 +195,24 @@ class _SignUpPageState extends State<SignUpPage> {
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: InkWell(
-                    onTap: () {
-                      if (isCountry==true) {
+                    onTap: () async {
+                      if (isCountry == true) {
+                        String name, number, country, email, password;
+                        name = t1.text;
+                        number = t2.text;
+                        country = currentCountry!;
+                        email = t3.text;
+                        password = t4.text;
+                        print(name);
+                        print(number);
+                        print(country);
+                        print(email);
+                        print(password);
+                        String sql =
+                            "insert into exam values ('$name','$number''$country','$email','$password')";
+                        print("sql= $sql");
+                        int qry = await widget.database!.rawInsert(sql);
+                        print("qry = $qry");
                         Navigator.push(context, MaterialPageRoute(
                           builder: (context) {
                             return Success();
@@ -216,7 +223,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         t3.clear();
                         t4.clear();
                         selectCountry = currentCountry!;
-                      }else{
+                      } else {
                         print("This is not possible...");
                       }
                       setState(() {});

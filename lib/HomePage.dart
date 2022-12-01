@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'Success.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -27,10 +29,11 @@ class _HomePageState extends State<HomePage> {
     database = await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
       await db.execute(
-          'CREATE TABLE exam (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, number TEXT, country TEXT, email TEXT, password TEXT)');
+          'CREATE TABLE exam (name TEXT, number TEXT, country TEXT, email TEXT, password TEXT)');
     });
   }
 
+  ///id INTEGER PRIMARY KEY AUTOINCREMENT,
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +61,9 @@ class _HomePageState extends State<HomePage> {
                             fontWeight: FontWeight.bold),
                         maxLines: 2,
                         "Explore global map of wind, weather, and ocean conditions")),
-                SizedBox(height: 8,),
+                SizedBox(
+                  height: 8,
+                ),
                 Container(
                     margin: EdgeInsets.only(left: 15, right: 15),
                     child: AutoSizeText(
@@ -74,9 +79,11 @@ class _HomePageState extends State<HomePage> {
                 ),
                 InkWell(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return SignUpPage(database);
-                      },));
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          return SignUpPage(database);
+                        },
+                      ));
                     },
                     child: Container(
                       height: 60,
@@ -104,7 +111,13 @@ class _HomePageState extends State<HomePage> {
                         style: TextButton.styleFrom(
                             fixedSize: Size(10, 0),
                             disabledForegroundColor: Colors.transparent),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Success(),
+                              ));
+                        },
                         child: Text(
                           "Log in",
                           style: TextStyle(color: Colors.blue, fontSize: 14),
